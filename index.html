@@ -196,21 +196,24 @@ footer strong{color:rgba(255,255,255,.75)}
 .nb-di-info p{font-size:.68rem;color:var(--text3)}
 .nb-di-rm{background:none;border:none;color:var(--text3);cursor:pointer;font-size:.9rem;padding:2px 6px;border-radius:6px;transition:all .2s}
 .nb-di-rm:hover{background:rgba(231,76,60,.1);color:#c0392b}
-.nb-mr{display:flex;flex-direction:column}
-.nb-tbs{display:flex;border-bottom:1px solid var(--border);background:rgba(255,255,255,.15)}
+.nb-mr{display:flex;flex-direction:column;min-height:560px}
+.nb-tbs{display:flex;border-bottom:1px solid var(--border);background:rgba(255,255,255,.15);flex-wrap:wrap}
 .nb-tb{padding:12px 16px;font-size:.78rem;font-weight:500;color:var(--text3);cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;white-space:nowrap}
 .nb-tb.on{color:var(--p2);border-bottom-color:var(--p);background:rgba(255,255,255,.2)}
-.nb-ct{flex:1;padding:18px;overflow-y:auto}
-.nb-pn{display:none;flex-direction:column;height:100%}
+.nb-ct{flex:1;padding:18px;overflow-y:auto;display:flex;flex-direction:column}
+.nb-pn{display:none;flex-direction:column;flex:1;height:100%}
 .nb-pn.on{display:flex}
-.msgs{flex:1;display:flex;flex-direction:column;gap:10px;min-height:280px;overflow-y:auto;margin-bottom:14px}
+.msgs{flex:1;display:flex;flex-direction:column;gap:10px;min-height:280px;max-height:400px;overflow-y:auto;margin-bottom:14px;padding-right:4px}
+.msgs::-webkit-scrollbar{width:4px}
+.msgs::-webkit-scrollbar-track{background:transparent}
+.msgs::-webkit-scrollbar-thumb{background:rgba(58,175,169,.3);border-radius:4px}
 .msg{padding:11px 15px;border-radius:14px;font-size:.82rem;line-height:1.6;max-width:82%}
 .msg.u{background:linear-gradient(135deg,var(--p),var(--p2));color:#fff;align-self:flex-end;border-bottom-right-radius:4px}
 .msg.a{background:rgba(255,255,255,.65);color:var(--text);align-self:flex-start;border-bottom-left-radius:4px;border:1px solid var(--glass-border)}
-.ci{display:flex;gap:8px}
+.ci{display:flex;gap:8px;margin-top:auto}
 .ci input{flex:1;background:rgba(255,255,255,.5);border:1.5px solid var(--glass-border);border-radius:50px;padding:10px 18px;font-family:'DM Sans',sans-serif;font-size:.83rem;outline:none;transition:border-color .2s;color:var(--text)}
 .ci input:focus{border-color:var(--p)}
-.ci button{background:linear-gradient(135deg,var(--p),var(--p2));color:#fff;border:none;border-radius:50px;padding:10px 22px;font-family:'DM Sans',sans-serif;font-weight:500;font-size:.83rem;cursor:pointer;transition:all .2s}
+.ci button{background:linear-gradient(135deg,var(--p),var(--p2));color:#fff;border:none;border-radius:50px;padding:10px 22px;font-family:'DM Sans',sans-serif;font-weight:500;font-size:.83rem;cursor:pointer;transition:all .2s;white-space:nowrap}
 .ci button:hover{transform:scale(1.02)}
 .ci button:disabled{opacity:.5;cursor:not-allowed}
 .sum-box{background:linear-gradient(135deg,rgba(58,175,169,.08),rgba(43,122,120,.05));border:1px solid rgba(58,175,169,.2);border-radius:14px;padding:18px;margin-bottom:14px}
@@ -317,7 +320,7 @@ footer strong{color:rgba(255,255,255,.75)}
     <div class="eyebrow">Módulos da plataforma</div>
     <h2 class="title">Tudo que você precisa,<br>em um só lugar</h2>
     <div class="bento" style="margin-top:36px">
-      <div class="bento-card featured" onclick="showSection('notebook')">
+      <div class="bento-card featured" onclick="openModal('register')">
         <span class="bc-icon">🤖</span>
         <div class="bc-title">Neuro I.A</div>
         <div class="bc-desc">Envie laudos, artigos e materiais. A IA analisa, resume e responde perguntas sobre o conteúdo — especializada em neurodivergências.</div>
@@ -352,7 +355,7 @@ footer strong{color:rgba(255,255,255,.75)}
         <div class="nb-top"><div class="nb-top-icon">🤖</div><div><h4>Neuro I.A</h4><p>Nenhum documento carregado</p></div></div>
         <div class="nb-body-ui">
           <div class="nb-left"><h5>Documentos</h5><div class="nb-drop"><span>📄</span><p>Clique para enviar PDF ou TXT</p></div></div>
-          <div class="nb-mr">
+          <div class="nb-right">
             <div class="nb-tabs-ui"><div class="nb-tab-ui on">💬 Perguntas</div><div class="nb-tab-ui">📝 Resumo</div><div class="nb-tab-ui">🎙️ Áudio</div></div>
             <div class="nb-chat">
               <div class="cm u">Quais estratégias o laudo recomenda para o TDAH em sala de aula?</div>
@@ -386,14 +389,14 @@ footer strong{color:rgba(255,255,255,.75)}
     <div class="aside">
       <div class="aside-user"><div class="aside-av" id="asideAv">U</div><div class="aside-info"><h4 id="asideName">Usuário</h4><p id="asidePerfil">Perfil</p></div></div>
       <div class="aside-nav">
-        <a class="on" onclick="showSection('home')"><span class="ni">🏠</span>Início</a>
-        <a onclick="showSection('notebook')"><span class="ni">🤖</span>Neuro I.A</a>
-        <a onclick="showSection('ensino')"><span class="ni">📚</span>Ensino Adaptado</a>
-        <a onclick="showSection('cognitivo')"><span class="ni">🧠</span>Cognitivo</a>
-        <a onclick="showSection('nutricao')"><span class="ni">🥗</span>Nutrição</a>
-        <a onclick="showSection('rotinas')"><span class="ni">🗓️</span>Rotinas Visuais</a>
-        <a onclick="showSection('sensorial')"><span class="ni">💆</span>Sensorial</a>
-        <a onclick="showSection('comunidade')"><span class="ni">👥</span>Comunidade</a>
+        <a class="on" onclick="showSection('home',this)"><span class="ni">🏠</span>Início</a>
+        <a onclick="showSection('notebook',this)"><span class="ni">🤖</span>Neuro I.A</a>
+        <a onclick="showSection('ensino',this)"><span class="ni">📚</span>Ensino Adaptado</a>
+        <a onclick="showSection('cognitivo',this)"><span class="ni">🧠</span>Cognitivo</a>
+        <a onclick="showSection('nutricao',this)"><span class="ni">🥗</span>Nutrição</a>
+        <a onclick="showSection('rotinas',this)"><span class="ni">🗓️</span>Rotinas Visuais</a>
+        <a onclick="showSection('sensorial',this)"><span class="ni">💆</span>Sensorial</a>
+        <a onclick="showSection('comunidade',this)"><span class="ni">👥</span>Comunidade</a>
       </div>
     </div>
     <div class="main-area">
@@ -426,32 +429,57 @@ footer strong{color:rgba(255,255,255,.75)}
             </div>
             <div class="nb-mr">
               <div class="nb-tbs">
-                <div class="nb-tb on" onclick="nbTab('chat',this)">💬 Perguntas</div>
+                <div class="nb-tb on" onclick="nbTab('chat',this)">💬 Chat</div>
                 <div class="nb-tb" onclick="nbTab('summary',this)">📝 Resumo</div>
                 <div class="nb-tb" onclick="nbTab('notes',this)">🗒️ Notas</div>
                 <div class="nb-tb" onclick="nbTab('audio',this)">🎙️ Áudio</div>
                 <div class="nb-tb" onclick="nbTab('sugs',this)">💡 Sugestões</div>
               </div>
               <div class="nb-ct">
+
+                <!-- PAINEL CHAT -->
                 <div class="nb-pn on" id="pn-chat">
-                  <div class="msgs" id="chatMsgs"><div class="empty"><span>💬</span><h4>Faça uma pergunta</h4><p>Envie um documento e pergunte sobre ele</p></div></div>
-                  <div class="ci"><input type="text" id="chatQ" placeholder="Ex: Quais estratégias o laudo recomenda?" onkeydown="if(event.key==='Enter')doChat()"><button onclick="doChat()" id="sendB">Enviar</button></div>
+                  <div class="msgs" id="chatMsgs">
+                    <div class="empty"><span>💬</span><h4>Faça uma pergunta</h4><p>Envie um documento e pergunte sobre ele</p></div>
+                  </div>
+                  <div class="ci">
+                    <input type="text" id="chatQ" placeholder="Ex: Quais estratégias o laudo recomenda?" onkeydown="if(event.key==='Enter')doChat()">
+                    <button onclick="doChat()" id="sendB">Enviar</button>
+                  </div>
                 </div>
+
+                <!-- PAINEL RESUMO -->
                 <div class="nb-pn" id="pn-summary">
                   <div id="sumOut"><div class="empty"><span>📝</span><h4>Nenhum resumo ainda</h4><p>Envie um documento e gere o resumo</p></div></div>
                   <button class="btn btn-primary" onclick="doSummary()" id="sumBtn" style="margin-top:14px;align-self:flex-start">Gerar Resumo Automático</button>
                 </div>
+
+                <!-- PAINEL NOTAS -->
                 <div class="nb-pn" id="pn-notes">
                   <div class="notes-ta"><textarea id="notesTA" placeholder="Escreva suas anotações aqui..."></textarea></div>
-                  <div class="notes-acts"><button class="btn btn-primary" onclick="saveNotes()">💾 Salvar</button><button class="btn btn-ghost" onclick="clearNotes()">🗑️ Limpar</button></div>
+                  <div class="notes-acts">
+                    <button class="btn btn-primary" onclick="saveNotes()">💾 Salvar</button>
+                    <button class="btn btn-ghost" onclick="clearNotes()">🗑️ Limpar</button>
+                  </div>
                 </div>
+
+                <!-- PAINEL ÁUDIO -->
                 <div class="nb-pn" id="pn-audio">
-                  <div class="audio-ctr"><span class="big">🎙️</span><h4>Gerar áudio do conteúdo</h4><p>Transforma o resumo em áudio narrado. Ideal para dislexia e preferência auditiva.</p><button class="audio-go" onclick="doAudio()">🎙️ Gerar Áudio</button><div id="audioOut" style="margin-top:20px"></div></div>
+                  <div class="audio-ctr">
+                    <span class="big">🎙️</span>
+                    <h4>Gerar áudio do conteúdo</h4>
+                    <p>Transforma o resumo em áudio narrado. Ideal para dislexia e preferência auditiva.</p>
+                    <button class="audio-go" onclick="doAudio()">🎙️ Gerar Áudio</button>
+                    <div id="audioOut" style="margin-top:20px"></div>
+                  </div>
                 </div>
+
+                <!-- PAINEL SUGESTÕES -->
                 <div class="nb-pn" id="pn-sugs">
                   <div id="sugsOut"><div class="empty"><span>💡</span><h4>Nenhuma sugestão ainda</h4><p>Envie um documento para receber sugestões</p></div></div>
                   <button class="btn btn-primary" onclick="doSugs()" id="sugsBtn" style="margin-top:14px;align-self:flex-start">Gerar Sugestões Personalizadas</button>
                 </div>
+
               </div>
             </div>
           </div>
@@ -489,7 +517,7 @@ footer strong{color:rgba(255,255,255,.75)}
 </div>
 
 <script>
-let user=null,docs=[],sumText='';
+let user=null, docs=[], sumText='';
 
 function openModal(t){document.getElementById('ov').classList.add('on');mTab(t)}
 function closeModal(){document.getElementById('ov').classList.remove('on')}
@@ -525,32 +553,34 @@ function enter(){
   document.getElementById('asideAv').textContent=user.nome[0].toUpperCase();
   const pl={neurodivergente:'🧩 Neurodivergente',cuidador:'👨‍👩‍👧 Cuidador',educador:'🏫 Educador'};
   document.getElementById('asidePerfil').textContent=pl[user.perfil]||user.perfil;
+  showSection('home');
 }
 function logout(){
-  user=null;docs=[];
+  user=null; docs=[];
   document.getElementById('landingPage').style.display='';
   document.getElementById('platformPage').classList.remove('on');
   document.getElementById('logoutBtn').style.display='none';
   document.querySelectorAll('.landing-el').forEach(el=>el.style.display='');
 }
-function showSection(n){
-  document.querySelectorAll('[id^="sec-"]').forEach(el=>el.style.display='none');
-  const el=document.getElementById('sec-'+n);
-  if(el)el.style.display='block';
+
+function showSection(n, el){
+  document.querySelectorAll('[id^="sec-"]').forEach(s=>s.style.display='none');
+  const sec=document.getElementById('sec-'+n);
+  if(sec) sec.style.display='block';
   document.querySelectorAll('.aside-nav a').forEach(a=>a.classList.remove('on'));
-  if(event&&event.currentTarget)event.currentTarget.classList.add('on');
-  if(n!=='home'&&!document.getElementById('landingPage').style.display){
-    if(!user){openModal('register');return}
-    enter();showSection(n);
-  }
+  if(el) el.classList.add('on');
+  // se clicou no notebook, garante que o painel chat está visível
+  if(n==='notebook') nbTab('chat', document.querySelector('.nb-tb'));
 }
+
 function handleFiles(e){
   Array.from(e.target.files).forEach(f=>{
     const r=new FileReader();
     r.onload=ev=>{
       docs.push({name:f.name,size:(f.size/1024).toFixed(1)+' KB',content:ev.target.result});
-      renderDocs();updateCount();
-    };r.readAsText(f);
+      renderDocs(); updateCount();
+    };
+    r.readAsText(f);
   });
 }
 function renderDocs(){
@@ -560,33 +590,39 @@ function renderDocs(){
     <button class="nb-di-rm" onclick="rmDoc(${i})">✕</button></div>`).join('');
 }
 function rmDoc(i){docs.splice(i,1);renderDocs();updateCount()}
-function updateCount(){document.getElementById('nbCount').textContent=docs.length?docs.length+' documento(s) carregado(s)':'Nenhum documento carregado'}
-function nbTab(name,el){
+function updateCount(){
+  document.getElementById('nbCount').textContent=
+    docs.length ? docs.length+' documento(s) carregado(s)' : 'Nenhum documento carregado';
+}
+
+function nbTab(name, el){
   document.querySelectorAll('.nb-tb').forEach(t=>t.classList.remove('on'));
-  el.classList.add('on');
-  document.querySelectorAll('.nb-pn').forEach(p=>{p.classList.remove('on');p.style.display='none'});
+  if(el) el.classList.add('on');
+  document.querySelectorAll('.nb-pn').forEach(p=>{
+    p.classList.remove('on');
+    p.style.display='none';
+  });
   const pn=document.getElementById('pn-'+name);
-  pn.classList.add('on');pn.style.display='flex';
+  if(pn){ pn.classList.add('on'); pn.style.display='flex'; }
 }
 
 // =============================================
-// FUNÇÕES DA NEURO I.A — CHAMANDO NETLIFY FUNCTION
+// NEURO I.A — NETLIFY FUNCTION
 // =============================================
-
 async function callIA(messages, userProfile){
-  const res = await fetch('/.netlify/functions/chat', {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({ messages, userProfile })
+  const res=await fetch('/.netlify/functions/chat',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({messages, userProfile})
   });
-  if(!res.ok) throw new Error('Erro na chamada da IA');
-  const data = await res.json();
+  if(!res.ok) throw new Error('Erro na IA: '+res.status);
+  const data=await res.json();
   return data.response;
 }
 
 async function doChat(){
   const q=document.getElementById('chatQ').value.trim();
-  if(!q)return;
+  if(!q) return;
   if(!docs.length){addMsg('ai','⚠️ Envie pelo menos um documento antes de fazer perguntas!');return}
   addMsg('user',q);
   document.getElementById('chatQ').value='';
@@ -594,15 +630,16 @@ async function doChat(){
   document.getElementById('sendB').disabled=true;
   const ctx=docs.map(d=>`[${d.name}]:\n${d.content}`).join('\n\n---\n\n');
   try{
-    const resposta = await callIA(
-      [{role:'user', content:`Documentos:\n\n${ctx}\n\nPergunta: ${q}`}],
+    const resposta=await callIA(
+      [{role:'user',content:`Documentos:\n\n${ctx}\n\nPergunta: ${q}`}],
       user?.cond||'geral'
     );
     rmLoading(lid);
-    addMsg('ai', resposta);
-  }catch{
+    addMsg('ai',resposta);
+  }catch(err){
     rmLoading(lid);
-    addMsg('ai','⚠️ Erro de conexão. Tente novamente em instantes.');
+    addMsg('ai','⚠️ Erro de conexão. Verifique sua internet e tente novamente.');
+    console.error(err);
   }
   document.getElementById('sendB').disabled=false;
 }
@@ -613,25 +650,27 @@ function addMsg(role,text){
   const d=document.createElement('div');
   d.className='msg '+(role==='user'?'u':'a');
   d.innerHTML=text.replace(/\n/g,'<br>').replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>');
-  c.appendChild(d);c.scrollTop=c.scrollHeight;return d;
+  c.appendChild(d); c.scrollTop=c.scrollHeight;
+  return d;
 }
 function addLoading(){
   const c=document.getElementById('chatMsgs');
   const d=document.createElement('div');
-  d.className='msg a';d.id='ld'+Date.now();
+  d.className='msg a'; d.id='ld'+Date.now();
   d.innerHTML='<div class="dots"><span></span><span></span><span></span></div>';
-  c.appendChild(d);c.scrollTop=c.scrollHeight;return d.id;
+  c.appendChild(d); c.scrollTop=c.scrollHeight;
+  return d.id;
 }
 function rmLoading(id){const e=document.getElementById(id);if(e)e.remove()}
 
 async function doSummary(){
   if(!docs.length){alert('Envie um documento primeiro!');return}
   const b=document.getElementById('sumBtn');
-  b.textContent='Gerando...';b.disabled=true;
+  b.textContent='Gerando...'; b.disabled=true;
   const ctx=docs.map(d=>`[${d.name}]:\n${d.content}`).join('\n\n---\n\n');
   try{
-    sumText = await callIA(
-      [{role:'user', content:`Crie um resumo completo, claro e acessível. Use linguagem simples. Inclua: pontos principais, recomendações práticas e conclusões importantes.\n\n${ctx}`}],
+    sumText=await callIA(
+      [{role:'user',content:`Crie um resumo completo, claro e acessível. Use linguagem simples. Inclua: pontos principais, recomendações práticas e conclusões importantes.\n\n${ctx}`}],
       user?.cond||'geral'
     );
     document.getElementById('sumOut').innerHTML=`
@@ -639,12 +678,13 @@ async function doSummary(){
       <p>${sumText.replace(/\n/g,'<br>').replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')}</p></div>
       <div class="sum-acts">
         <button class="sa" onclick="navigator.clipboard.writeText(sumText).then(()=>alert('Copiado!'))">📋 Copiar</button>
-        <button class="sa" onclick="document.getElementById('notesTA').value=sumText">🗒️ Para notas</button>
+        <button class="sa" onclick="document.getElementById('notesTA').value=sumText;nbTab('notes',document.querySelectorAll('.nb-tb')[2])">🗒️ Para notas</button>
       </div>`;
-  }catch{
+  }catch(err){
     document.getElementById('sumOut').innerHTML='<p style="color:red">Erro ao gerar resumo. Tente novamente.</p>';
+    console.error(err);
   }
-  b.textContent='Gerar Resumo Automático';b.disabled=false;
+  b.textContent='Gerar Resumo Automático'; b.disabled=false;
 }
 
 function saveNotes(){alert('✅ Notas salvas com sucesso!')}
@@ -653,19 +693,23 @@ function clearNotes(){if(confirm('Limpar todas as notas?'))document.getElementBy
 function doAudio(){
   if(!sumText&&!docs.length){alert('Gere um resumo primeiro!');return}
   const text=sumText||docs.map(d=>d.content).join(' ').substring(0,2000);
-  const u=new SpeechSynthesisUtterance(text);u.lang='pt-BR';u.rate=0.9;
+  const u=new SpeechSynthesisUtterance(text);
+  u.lang='pt-BR'; u.rate=0.9;
   window.speechSynthesis.speak(u);
-  document.getElementById('audioOut').innerHTML='<div style="background:rgba(58,175,169,.1);border:1px solid rgba(58,175,169,.2);border-radius:12px;padding:14px;font-size:.82rem;color:var(--p2)">🔊 Reproduzindo áudio...<br><button onclick="window.speechSynthesis.cancel()" style="margin-top:8px;background:#e74c3c;color:#fff;border:none;border-radius:50px;padding:7px 16px;cursor:pointer;font-family:DM Sans,sans-serif;font-size:.78rem">⏹ Parar</button></div>';
+  document.getElementById('audioOut').innerHTML=`
+    <div style="background:rgba(58,175,169,.1);border:1px solid rgba(58,175,169,.2);border-radius:12px;padding:14px;font-size:.82rem;color:var(--p2)">
+    🔊 Reproduzindo áudio...<br>
+    <button onclick="window.speechSynthesis.cancel()" style="margin-top:8px;background:#e74c3c;color:#fff;border:none;border-radius:50px;padding:7px 16px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.78rem">⏹ Parar</button></div>`;
 }
 
 async function doSugs(){
   if(!docs.length){alert('Envie um documento primeiro!');return}
   const b=document.getElementById('sugsBtn');
-  b.textContent='Gerando...';b.disabled=true;
+  b.textContent='Gerando...'; b.disabled=true;
   const ctx=docs.map(d=>`[${d.name}]:\n${d.content.substring(0,800)}`).join('\n\n');
   try{
-    const txt = await callIA(
-      [{role:'user', content:`Perfil: ${user?.cond||'geral'}. Gere 4 sugestões práticas baseadas nos documentos. Retorne APENAS JSON válido:\n{"s":[{"e":"emoji","t":"título curto","d":"descrição de 1 linha"}]}\n\nDocumentos:\n${ctx}`}],
+    const txt=await callIA(
+      [{role:'user',content:`Perfil: ${user?.cond||'geral'}. Gere 4 sugestões práticas baseadas nos documentos. Retorne APENAS JSON válido:\n{"s":[{"e":"emoji","t":"título curto","d":"descrição de 1 linha"}]}\n\nDocumentos:\n${ctx}`}],
       user?.cond||'geral'
     );
     let sugs=[];
@@ -677,13 +721,17 @@ async function doSugs(){
     }else{
       document.getElementById('sugsOut').innerHTML='<p style="color:var(--text2)">Não foi possível gerar sugestões. Tente novamente.</p>';
     }
-  }catch{
+  }catch(err){
     document.getElementById('sugsOut').innerHTML='<p style="color:red">Erro ao gerar sugestões. Tente novamente.</p>';
+    console.error(err);
   }
-  b.textContent='Gerar Sugestões Personalizadas';b.disabled=false;
+  b.textContent='Gerar Sugestões Personalizadas'; b.disabled=false;
 }
 
-document.querySelectorAll('.nb-pn').forEach(p=>{if(!p.classList.contains('on'))p.style.display='none'});
+// Init: esconde todos os painéis exceto o chat
+document.querySelectorAll('.nb-pn').forEach(p=>{
+  if(!p.classList.contains('on')) p.style.display='none';
+});
 </script>
 </body>
 </html>
