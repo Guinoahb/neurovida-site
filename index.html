@@ -728,9 +728,15 @@ async function doSugs(){
   b.textContent='Gerar Sugestões Personalizadas'; b.disabled=false;
 }
 
-// Init: esconde todos os painéis exceto o chat
-document.querySelectorAll('.nb-pn').forEach(p=>{
-  if(!p.classList.contains('on')) p.style.display='none';
+// Init: garante que painéis iniciam corretamente após DOM carregar
+document.addEventListener('DOMContentLoaded', function(){
+  document.querySelectorAll('.nb-pn').forEach(p=>{
+    if(!p.classList.contains('on')){
+      p.style.display='none';
+    } else {
+      p.style.display='flex';
+    }
+  });
 });
 </script>
 </body>
