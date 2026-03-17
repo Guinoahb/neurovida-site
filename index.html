@@ -202,7 +202,7 @@ footer strong{color:rgba(255,255,255,.75)}
 .nb-tb.on{color:var(--p2);border-bottom-color:var(--p);background:rgba(255,255,255,.2)}
 .nb-ct{flex:1;padding:18px;overflow-y:auto;display:flex;flex-direction:column}
 .nb-pn{display:none;flex-direction:column;flex:1;height:100%}
-.nb-pn.on{display:flex}
+.nb-pn.on{display:flex!important}
 .msgs{flex:1;display:flex;flex-direction:column;gap:10px;min-height:280px;max-height:400px;overflow-y:auto;margin-bottom:14px;padding-right:4px}
 .msgs::-webkit-scrollbar{width:4px}
 .msgs::-webkit-scrollbar-track{background:transparent}
@@ -728,16 +728,12 @@ async function doSugs(){
   b.textContent='Gerar Sugestões Personalizadas'; b.disabled=false;
 }
 
-// Init: garante que painéis iniciam corretamente após DOM carregar
-document.addEventListener('DOMContentLoaded', function(){
+// Init: usa window.onload para garantir que tudo está carregado
+window.onload = function(){
   document.querySelectorAll('.nb-pn').forEach(p=>{
-    if(!p.classList.contains('on')){
-      p.style.display='none';
-    } else {
-      p.style.display='flex';
-    }
+    p.style.display = p.classList.contains('on') ? 'flex' : 'none';
   });
-});
+};
 </script>
 </body>
 </html>
