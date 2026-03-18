@@ -623,15 +623,14 @@ async function callIA(messages, userProfile){
 async function doChat(){
   const q=document.getElementById('chatQ').value.trim();
   if(!q) return;
-  if(!docs.length){addMsg('ai','⚠️ Envie pelo menos um documento antes de fazer perguntas!');return}
   addMsg('user',q);
   document.getElementById('chatQ').value='';
   const lid=addLoading();
   document.getElementById('sendB').disabled=true;
-  const ctx=docs.map(d=>`[${d.name}]:\n${d.content}`).join('\n\n---\n\n');
+  const ctx=docs.length ? docs.map(d=>d.name+': '+d.content).join('---') : null;
   try{
     const resposta=await callIA(
-      [{role:'user',content:`Documentos:\n\n${ctx}\n\nPergunta: ${q}`}],
+      [{role:'user',content: ctx ? 'Documentos: '+ctx+' Pergunta: '+q : q}],
       user?.cond||'geral'
     );
     rmLoading(lid);
