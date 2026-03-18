@@ -150,8 +150,8 @@ footer strong{color:rgba(255,255,255,.75)}
 .f-submit{width:100%;margin-top:6px;padding:13px;font-size:.95rem}
 .platform{display:none}
 .platform.on{display:block}
-.dash{display:grid;grid-template-columns:240px 1fr;min-height:100vh;padding-top:80px}
-.aside{background:rgba(255,255,255,.75);backdrop-filter:blur(20px);border-right:1px solid var(--border);padding:20px 14px;position:fixed;top:80px;left:0;bottom:0;width:240px;overflow-y:auto;z-index:50}
+.dash{display:block;min-height:100vh;padding-top:80px}
+.aside{background:rgba(255,255,255,.75);backdrop-filter:blur(20px);border-right:1px solid var(--border);padding:20px 14px;position:fixed;top:80px;left:0;bottom:0;width:220px;overflow-y:auto;z-index:50}
 .aside-user{display:flex;align-items:center;gap:12px;padding:14px;background:linear-gradient(135deg,rgba(58,175,169,.12),rgba(43,122,120,.08));border-radius:var(--r2);margin-bottom:20px;border:1px solid rgba(58,175,169,.15)}
 .aside-av{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,var(--p),var(--p2));display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:1rem;font-weight:800;color:#fff}
 .aside-info h4{font-family:'Syne',sans-serif;font-size:.85rem;font-weight:700;color:var(--text)}
@@ -159,7 +159,7 @@ footer strong{color:rgba(255,255,255,.75)}
 .aside-nav a{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;font-size:.85rem;font-weight:500;color:var(--text2);transition:all .2s;margin-bottom:2px;cursor:pointer}
 .aside-nav a:hover,.aside-nav a.on{background:rgba(58,175,169,.1);color:var(--p2)}
 .aside-nav a .ni{font-size:1rem;width:20px;text-align:center}
-.main-area{margin-left:240px;padding:28px;min-width:0;overflow-x:hidden}
+.main-area{margin-left:220px;padding:20px;min-width:0;overflow-x:hidden;width:calc(100% - 220px)}
 .dash-head{background:linear-gradient(135deg,var(--p2),var(--p));border-radius:var(--r);padding:28px;color:#fff;margin-bottom:24px;display:flex;justify-content:space-between;align-items:center;position:relative;overflow:hidden}
 .dash-head::after{content:'🧠';position:absolute;right:28px;font-size:4rem;opacity:.15}
 .dash-head h2{font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800;margin-bottom:4px}
