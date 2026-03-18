@@ -1,105 +1,71 @@
-exports.handler = async function (event, context) {
-  // Permitir CORS
-  const headers = {
-    "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Headers": "Content-Type",
-    "Access-Control-Allow-Methods": "POST, OPTIONS",
-    "Content-Type": "application/json",
+exports.handler = async function(event, context) {
+  if (event.httpMethod !== 'POST') {
+    return { statusCode: 405, body: 'Method Not Allowed' };
+  }
+
+  const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+
+  if (!GEMINI_API_KEY) {
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ error: 'Chave da API não configurada.' })
+    };
+  }
+
+  let body;
+  try {
+    body = JSON.parse(event.body);
+  } catch {
+    return { statusCode: 400, body: JSON.stringify({ error: 'JSON inválido.' }) };
+  }
+
+  const { messages, userProfile } = body;
+
+  if (!messages || !Array.isArray(messages)) {
+    return { statusCode: 400, body: JSON.stringify({ error: 'Mensagens inválidas.' }) };
+  }
+
+  const systemPrompt = `Você é o Neuro I.A, assistente especializado da plataforma NeuroVida. Seu público são pessoas com TDAH, TEA, Dislexia, Dispraxia, Discalculia, Disgrafia, Tourette, Altas Habilidades e TPS, além de familiares e educadores. Perfil atual: ${userProfile || 'geral'}. Use linguagem simples e acolhedora. Frases curtas. Nunca faça diagnósticos. Responda sempre em português do Brasil.`;
+
+  const userMessage = messages[messages.length - 1]?.content || '';
+
+  const geminiBody = {
+    system_instruction: { parts: [{ text: systemPrompt }] },
+    contents: [{ role: 'user', parts: [{ text: userMessage }] }],
+    generationConfig: { temperature: 0.7, maxOutputTokens: 1024 }
   };
 
-  // Responder preflight
-  if (event.httpMethod === "OPTIONS") {
-    return { statusCode: 200, headers, body: "" };
-  }
-
-  if (event.httpMethod !== "POST") {
-    return { statusCode: 405, headers, body: JSON.stringify({ error: "Método não permitido" }) };
-  }
-
   try {
-    const { messages, perfil, condicao } = JSON.parse(event.body);
-
-    const systemPrompt = `Você é o Neuro I.A, assistente inteligente e acolhedor da plataforma NeuroVida — a maior plataforma brasileira de apoio à neurodivergência.
-
-QUEM VOCÊ É:
-Você é especialista em todas as condições de neurodivergência: TDAH, TEA (Autismo), Dislexia, Dispraxia, Discalculia, Disgrafia, Síndrome de Tourette, Altas Habilidades/Superdotação e Transtorno do Processamento Sensorial (TPS).
-
-PERFIL DO USUÁRIO ATUAL:
-- Perfil: ${perfil || "não informado"}
-- Condição principal: ${condicao || "não informada"}
-
-COMO VOCÊ SE COMUNICA:
-- Use linguagem simples, clara e acolhedora — nunca use jargões médicos sem explicar
-- Frases curtas — máximo 2 linhas por parágrafo
-- Use listas numeradas ou com bullets quando for listar coisas
-- Seja sempre empático, encorajador e positivo
-- Nunca faça diagnósticos — você apoia, não diagnostica
-- Sempre sugira buscar profissional especializado quando necessário
-
-REGRAS POR PERFIL:
-- Para NEURODIVERGENTES: seja direto, objetivo, use exemplos práticos do cotidiano
-- Para PAIS E CUIDADORES: seja acolhedor, explique como o cérebro funciona de forma simples, dê estratégias práticas
-- Para EDUCADORES: seja técnico mas acessível, foque em estratégias pedagógicas e adaptações
-
-REGRAS POR CONDIÇÃO:
-- TDAH: respostas curtas e objetivas, use listas, evite textos longos
-- TEA: evite linguagem figurada e metáforas, seja literal e claro
-- DISLEXIA: prefira listas a parágrafos, use linguagem simples
-- ALTAS HABILIDADES: pode ser mais elaborado e aprofundado
-
-O QUE VOCÊ PODE FAZER:
-✅ Explicar como o cérebro neurodivergente funciona
-✅ Dar estratégias práticas para o dia a dia
-✅ Ajudar a entender laudos e documentos
-✅ Sugerir adaptações pedagógicas
-✅ Orientar sobre nutrição específica por condição
-✅ Apoiar emocionalmente com empatia
-✅ Indicar recursos e próximos passos
-
-O QUE VOCÊ NÃO FAZ:
-❌ Fazer diagnósticos
-❌ Substituir consultas médicas ou terapêuticas
-❌ Prescrever medicamentos
-❌ Dar opiniões sobre casos clínicos específicos sem dados suficientes
-
-SEMPRE FINALIZE COM:
-Quando relevante, lembre o usuário que a plataforma NeuroVida tem módulos de apoio, cursos e profissionais especializados disponíveis.`;
-
-    const response = await fetch("https://api.anthropic.com/v1/messages", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "x-api-key": process.env.ANTHROPIC_API_KEY,
-        "anthropic-version": "2023-06-01",
-      },
-      body: JSON.stringify({
-        model: "claude-sonnet-4-20250514",
-        max_tokens: 1024,
-        system: systemPrompt,
-        messages: messages,
-      }),
-    });
+    const response = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(geminiBody)
+      }
+    );
 
     const data = await response.json();
 
     if (!response.ok) {
       return {
         statusCode: response.status,
-        headers,
-        body: JSON.stringify({ error: data.error?.message || "Erro na API" }),
+        body: JSON.stringify({ error: data.error?.message || 'Erro na API Gemini.' })
       };
     }
 
+    const text = data.candidates?.[0]?.content?.parts?.[0]?.text || 'Sem resposta.';
+
     return {
       statusCode: 200,
-      headers,
-      body: JSON.stringify({ content: data.content[0].text }),
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ response: text })
     };
-  } catch (error) {
+
+  } catch (err) {
     return {
       statusCode: 500,
-      headers,
-      body: JSON.stringify({ error: "Erro interno: " + error.message }),
+      body: JSON.stringify({ error: 'Erro interno: ' + err.message })
     };
   }
 };
