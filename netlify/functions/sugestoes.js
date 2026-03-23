@@ -29,7 +29,7 @@ Você DEVE retornar APENAS um JSON válido, sem nenhum texto antes ou depois.
 Use exatamente esta estrutura:
 {"s":[{"e":"emoji","t":"título curto","d":"descrição breve e prática"}]}`;
 
-    // 5. Faz a requisição para o OpenRouter (Usando Gemini 2.0 Flash gratuito)
+    // 5. Faz a requisição para o OpenRouter (Usando Llama 3.1 8B gratuito e estável)
     const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -39,7 +39,7 @@ Use exatamente esta estrutura:
         "X-Title": "NeuroVida"
       },
       body: JSON.stringify({
-        model: "google/gemini-2.0-flash-exp:free",
+        model: "meta-llama/llama-3.1-8b-instruct:free",
         messages: [
           { role: "system", content: systemMessage },
           { role: "user", content: `Documentos:\n\n${contexto}` }

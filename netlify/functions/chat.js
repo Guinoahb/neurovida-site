@@ -30,7 +30,7 @@ exports.handler = async function(event, context) {
 Documentos fornecidos:
 ${contexto}`;
 
-    // 5. Faz a requisição para o OpenRouter (Usando Gemini 2.0 Flash gratuito)
+    // 5. Faz a requisição para o OpenRouter (Usando Llama 3.1 8B gratuito e estável)
     const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -40,7 +40,7 @@ ${contexto}`;
         "X-Title": "NeuroVida"
       },
       body: JSON.stringify({
-        model: "google/gemini-2.0-flash-exp:free",
+        model: "meta-llama/llama-3.1-8b-instruct:free",
         messages: [
           { role: "system", content: systemMessage },
           { role: "user", content: pergunta }
