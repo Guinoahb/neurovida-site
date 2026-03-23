@@ -10,11 +10,10 @@ exports.handler = async function(event, context) {
   try {
     // 2. Faz o parse do corpo da requisição enviada pelo front-end
     const body = JSON.parse(event.body);
-    const pergunta = body.pergunta;
     const contexto = body.contexto || "";
     const perfil = body.perfil || "geral";
 
-    // 3. Puxa a chave da API das variáveis de ambiente do Netlify
+    // 3. Puxa a chave da API
     const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
 
     if (!OPENROUTER_API_KEY) {
@@ -24,11 +23,8 @@ exports.handler = async function(event, context) {
       };
     }
 
-    // 4. Monta o prompt do sistema orientando a IA
-    const systemMessage = `Você é o Neuro I.A, um assistente especialista em neurodivergências (TDAH, TEA, Dislexia, etc). O usuário atual tem o perfil/condição: ${perfil}. Responda de forma acolhedora, clara, com parágrafos curtos. Baseie-se estritamente nos documentos fornecidos abaixo para responder. Se a resposta não estiver nos documentos, avise.
-    
-Documentos fornecidos:
-${contexto}`;
+    // 4. Monta o prompt do sistema para o Resumo
+    const systemMessage = `Você é um especialista em neurodivergências. Crie um resumo claro, acessível e organizado dos documentos enviados. Adapte a linguagem para o perfil: ${perfil}. Inclua: os pontos principais, recomendações práticas encontradas no texto e uma breve conclusão. Use parágrafos curtos e linguagem simples.`;
 
     // 5. Faz a requisição para o OpenRouter
     const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
@@ -36,31 +32,28 @@ ${contexto}`;
       headers: {
         "Authorization": `Bearer ${OPENROUTER_API_KEY}`,
         "Content-Type": "application/json",
-        "HTTP-Referer": "https://benevolent-daifuku-43fe48.netlify.app", // Recomendado pelo OpenRouter
-        "X-Title": "NeuroVida" // Recomendado pelo OpenRouter
+        "HTTP-Referer": "https://benevolent-daifuku-43fe48.netlify.app",
+        "X-Title": "NeuroVida"
       },
       body: JSON.stringify({
         model: "meta-llama/llama-3.3-70b-instruct:free",
         messages: [
           { role: "system", content: systemMessage },
-          { role: "user", content: pergunta }
+          { role: "user", content: `Documentos para resumir:\n\n${contexto}` }
         ]
       })
     });
 
-    // 6. Trata erros caso o OpenRouter recuse a requisição
+    // 6. Trata erros do OpenRouter
     if (!response.ok) {
       const errorText = await response.text();
       return {
         statusCode: response.status,
-        body: JSON.stringify({ 
-          erro: `Erro na API OpenRouter: ${response.status}`, 
-          detalhes: errorText 
-        })
+        body: JSON.stringify({ erro: `Erro na API OpenRouter: ${response.status}`, detalhes: errorText })
       };
     }
 
-    // 7. Extrai a resposta e devolve para o front-end
+    // 7. Extrai e devolve a resposta
     const data = await response.json();
     const textoResposta = data.choices[0].message.content;
 
@@ -70,13 +63,9 @@ ${contexto}`;
     };
 
   } catch (error) {
-    // 8. Captura erros de sintaxe no JSON ou falhas no servidor
     return {
       statusCode: 500,
-      body: JSON.stringify({ 
-        erro: "Erro interno no servidor (Netlify Function)", 
-        detalhes: error.message 
-      })
+      body: JSON.stringify({ erro: "Erro interno no servidor", detalhes: error.message })
     };
   }
 };
