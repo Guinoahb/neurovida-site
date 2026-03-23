@@ -1,68 +1,82 @@
 exports.handler = async function(event, context) {
-  if (event.httpMethod !== 'POST') {
-    return { statusCode: 405, body: 'Method Not Allowed' };
-  }
-
-  const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
-
-  if (!OPENROUTER_API_KEY) {
+  // 1. Bloqueia requisições que não sejam POST
+  if (event.httpMethod !== "POST") {
     return {
-      statusCode: 500,
-      body: JSON.stringify({ error: 'Chave nao configurada.' })
+      statusCode: 405,
+      body: JSON.stringify({ erro: "Método não permitido. Use POST." })
     };
   }
 
-  let body;
   try {
-    body = JSON.parse(event.body);
-  } catch(e) {
-    return { statusCode: 400, body: JSON.stringify({ error: 'JSON invalido.' }) };
-  }
+    // 2. Faz o parse do corpo da requisição enviada pelo front-end
+    const body = JSON.parse(event.body);
+    const pergunta = body.pergunta;
+    const contexto = body.contexto || "";
+    const perfil = body.perfil || "geral";
 
-  const messages = body.messages || [];
-  const userProfile = body.userProfile || 'geral';
-  const systemPrompt = 'Voce e o Neuro I.A, assistente da plataforma NeuroVida. Especializado em TDAH, TEA, Dislexia e neurodivergencias. Perfil do usuario: ' + userProfile + '. Use linguagem simples e acolhedora. Nunca faca diagnosticos. Responda em portugues do Brasil.';
+    // 3. Puxa a chave da API das variáveis de ambiente do Netlify
+    const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
 
-  try {
-    const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + OPENROUTER_API_KEY,
-        'HTTP-Referer': 'https://benevolent-daifuku-43fe48.netlify.app',
-        'X-Title': 'NeuroVida'
-      },
-      body: JSON.stringify({
-        model: 'meta-llama/llama-3.3-8b-instruct:free',
-        messages: [
-          { role: 'system', content: systemPrompt }
-        ].concat(messages),
-        max_tokens: 1024,
-        temperature: 0.7
-      })
-    });
-
-    const data = await response.json();
-
-    if (!response.ok) {
+    if (!OPENROUTER_API_KEY) {
       return {
-        statusCode: response.status,
-        body: JSON.stringify({ error: data.error ? data.error.message : 'Erro na API.' })
+        statusCode: 500,
+        body: JSON.stringify({ erro: "Chave OPENROUTER_API_KEY não configurada no Netlify." })
       };
     }
 
-    const text = data.choices && data.choices[0] && data.choices[0].message ? data.choices[0].message.content : 'Sem resposta.';
+    // 4. Monta o prompt do sistema orientando a IA
+    const systemMessage = `Você é o Neuro I.A, um assistente especialista em neurodivergências (TDAH, TEA, Dislexia, etc). O usuário atual tem o perfil/condição: ${perfil}. Responda de forma acolhedora, clara, com parágrafos curtos. Baseie-se estritamente nos documentos fornecidos abaixo para responder. Se a resposta não estiver nos documentos, avise.
+    
+Documentos fornecidos:
+${contexto}`;
+
+    // 5. Faz a requisição para o OpenRouter
+    const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${OPENROUTER_API_KEY}`,
+        "Content-Type": "application/json",
+        "HTTP-Referer": "https://benevolent-daifuku-43fe48.netlify.app", // Recomendado pelo OpenRouter
+        "X-Title": "NeuroVida" // Recomendado pelo OpenRouter
+      },
+      body: JSON.stringify({
+        model: "meta-llama/llama-3.3-8b-instruct",
+        messages: [
+          { role: "system", content: systemMessage },
+          { role: "user", content: pergunta }
+        ]
+      })
+    });
+
+    // 6. Trata erros caso o OpenRouter recuse a requisição
+    if (!response.ok) {
+      const errorText = await response.text();
+      return {
+        statusCode: response.status,
+        body: JSON.stringify({ 
+          erro: `Erro na API OpenRouter: ${response.status}`, 
+          detalhes: errorText 
+        })
+      };
+    }
+
+    // 7. Extrai a resposta e devolve para o front-end
+    const data = await response.json();
+    const textoResposta = data.choices[0].message.content;
 
     return {
       statusCode: 200,
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ response: text })
+      body: JSON.stringify({ texto: textoResposta })
     };
 
-  } catch(err) {
+  } catch (error) {
+    // 8. Captura erros de sintaxe no JSON ou falhas no servidor
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: 'Erro interno: ' + err.message })
+      body: JSON.stringify({ 
+        erro: "Erro interno no servidor (Netlify Function)", 
+        detalhes: error.message 
+      })
     };
   }
 };
