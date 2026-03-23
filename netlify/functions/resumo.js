@@ -1,5 +1,4 @@
 exports.handler = async function(event, context) {
-  // 1. Bloqueia requisições que não sejam POST
   if (event.httpMethod !== "POST") {
     return {
       statusCode: 405,
@@ -8,12 +7,10 @@ exports.handler = async function(event, context) {
   }
 
   try {
-    // 2. Faz o parse do corpo da requisição enviada pelo front-end
     const body = JSON.parse(event.body);
     const contexto = body.contexto || "";
     const perfil = body.perfil || "geral";
 
-    // 3. Puxa a chave da API
     const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
 
     if (!OPENROUTER_API_KEY) {
@@ -23,10 +20,9 @@ exports.handler = async function(event, context) {
       };
     }
 
-    // 4. Monta o prompt do sistema para o Resumo
     const systemMessage = `Você é um especialista em neurodivergências. Crie um resumo claro, acessível e organizado dos documentos enviados. Adapte a linguagem para o perfil: ${perfil}. Inclua: os pontos principais, recomendações práticas encontradas no texto e uma breve conclusão. Use parágrafos curtos e linguagem simples.`;
 
-    // 5. Faz a requisição para o OpenRouter (Usando Gemini 2.0 Flash gratuito)
+    // Roteador automático do OpenRouter para modelos gratuitos
     const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -36,7 +32,7 @@ exports.handler = async function(event, context) {
         "X-Title": "NeuroVida"
       },
       body: JSON.stringify({
-        model: "google/gemini-2.0-flash-exp:free",
+        model: "openrouter/free",
         messages: [
           { role: "system", content: systemMessage },
           { role: "user", content: `Documentos para resumir:\n\n${contexto}` }
@@ -44,7 +40,6 @@ exports.handler = async function(event, context) {
       })
     });
 
-    // 6. Trata erros do OpenRouter
     if (!response.ok) {
       const errorText = await response.text();
       return {
@@ -53,7 +48,6 @@ exports.handler = async function(event, context) {
       };
     }
 
-    // 7. Extrai e devolve a resposta
     const data = await response.json();
     const textoResposta = data.choices[0].message.content;
 

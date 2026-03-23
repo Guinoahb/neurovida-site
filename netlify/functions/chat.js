@@ -1,5 +1,4 @@
 exports.handler = async function(event, context) {
-  // 1. Bloqueia requisições que não sejam POST
   if (event.httpMethod !== "POST") {
     return {
       statusCode: 405,
@@ -8,13 +7,11 @@ exports.handler = async function(event, context) {
   }
 
   try {
-    // 2. Faz o parse do corpo da requisição enviada pelo front-end
     const body = JSON.parse(event.body);
     const pergunta = body.pergunta;
     const contexto = body.contexto || "";
     const perfil = body.perfil || "geral";
 
-    // 3. Puxa a chave da API das variáveis de ambiente do Netlify
     const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
 
     if (!OPENROUTER_API_KEY) {
@@ -24,13 +21,12 @@ exports.handler = async function(event, context) {
       };
     }
 
-    // 4. Monta o prompt do sistema orientando a IA
     const systemMessage = `Você é o Neuro I.A, um assistente especialista em neurodivergências (TDAH, TEA, Dislexia, etc). O usuário atual tem o perfil/condição: ${perfil}. Responda de forma acolhedora, clara, com parágrafos curtos. Baseie-se estritamente nos documentos fornecidos abaixo para responder. Se a resposta não estiver nos documentos, avise.
     
 Documentos fornecidos:
 ${contexto}`;
 
-    // 5. Faz a requisição para o OpenRouter (Usando Llama 3.1 8B gratuito e estável)
+    // Roteador automático do OpenRouter para modelos gratuitos
     const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -40,7 +36,7 @@ ${contexto}`;
         "X-Title": "NeuroVida"
       },
       body: JSON.stringify({
-        model: "meta-llama/llama-3.1-8b-instruct:free",
+        model: "openrouter/free",
         messages: [
           { role: "system", content: systemMessage },
           { role: "user", content: pergunta }
@@ -48,7 +44,6 @@ ${contexto}`;
       })
     });
 
-    // 6. Trata erros caso o OpenRouter recuse a requisição
     if (!response.ok) {
       const errorText = await response.text();
       return {
@@ -60,7 +55,6 @@ ${contexto}`;
       };
     }
 
-    // 7. Extrai a resposta e devolve para o front-end
     const data = await response.json();
     const textoResposta = data.choices[0].message.content;
 
@@ -70,7 +64,6 @@ ${contexto}`;
     };
 
   } catch (error) {
-    // 8. Captura erros de sintaxe no JSON ou falhas no servidor
     return {
       statusCode: 500,
       body: JSON.stringify({ 

@@ -1,5 +1,4 @@
 exports.handler = async function(event, context) {
-  // 1. Bloqueia requisições que não sejam POST
   if (event.httpMethod !== "POST") {
     return {
       statusCode: 405,
@@ -8,12 +7,10 @@ exports.handler = async function(event, context) {
   }
 
   try {
-    // 2. Faz o parse do corpo da requisição
     const body = JSON.parse(event.body);
     const contexto = body.contexto || "";
     const perfil = body.perfil || "geral";
 
-    // 3. Puxa a chave da API
     const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
 
     if (!OPENROUTER_API_KEY) {
@@ -23,13 +20,12 @@ exports.handler = async function(event, context) {
       };
     }
 
-    // 4. Monta o prompt do sistema exigindo JSON
     const systemMessage = `Você é um especialista em neurodivergências. Leia o documento e gere 4 sugestões práticas baseadas nele para o perfil: ${perfil}. 
 Você DEVE retornar APENAS um JSON válido, sem nenhum texto antes ou depois. 
 Use exatamente esta estrutura:
 {"s":[{"e":"emoji","t":"título curto","d":"descrição breve e prática"}]}`;
 
-    // 5. Faz a requisição para o OpenRouter (Usando Llama 3.1 8B gratuito e estável)
+    // Roteador automático do OpenRouter para modelos gratuitos
     const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -39,7 +35,7 @@ Use exatamente esta estrutura:
         "X-Title": "NeuroVida"
       },
       body: JSON.stringify({
-        model: "meta-llama/llama-3.1-8b-instruct:free",
+        model: "openrouter/free",
         messages: [
           { role: "system", content: systemMessage },
           { role: "user", content: `Documentos:\n\n${contexto}` }
@@ -58,20 +54,16 @@ Use exatamente esta estrutura:
     const data = await response.json();
     let textoResposta = data.choices[0].message.content;
 
-    // 6. Limpeza e Parse do JSON retornado pela IA
     let sugestoesArray = [];
     try {
-      // Remove possíveis marcações de código (```json ... ```) que a IA costuma colocar
       textoResposta = textoResposta.replace(/```json/g, '').replace(/```/g, '').trim();
       const parsedData = JSON.parse(textoResposta);
       sugestoesArray = parsedData.s || [];
     } catch (parseError) {
       console.log("Falha ao fazer parse do JSON da IA:", textoResposta);
-      // Fallback amigável caso a IA não retorne o JSON no formato perfeito
       sugestoesArray = [{ e: "⚠️", t: "Aviso", d: "Não foi possível formatar as sugestões. Tente novamente." }];
     }
 
-    // 7. Retorna o array pronto para o front-end
     return {
       statusCode: 200,
       body: JSON.stringify({ sugestoes: sugestoesArray })
