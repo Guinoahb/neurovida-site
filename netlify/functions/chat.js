@@ -30,17 +30,17 @@ exports.handler = async function(event, context) {
 Documentos fornecidos:
 ${contexto}`;
 
-    // 5. Faz a requisição para o OpenRouter
+    // 5. Faz a requisição para o OpenRouter (Usando Gemini 2.0 Flash gratuito)
     const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
       method: "POST",
       headers: {
         "Authorization": `Bearer ${OPENROUTER_API_KEY}`,
         "Content-Type": "application/json",
-        "HTTP-Referer": "https://benevolent-daifuku-43fe48.netlify.app", // Recomendado pelo OpenRouter
-        "X-Title": "NeuroVida" // Recomendado pelo OpenRouter
+        "HTTP-Referer": "https://benevolent-daifuku-43fe48.netlify.app",
+        "X-Title": "NeuroVida"
       },
       body: JSON.stringify({
-        model: "meta-llama/llama-3.3-70b-instruct:free",
+        model: "google/gemini-2.0-flash-exp:free",
         messages: [
           { role: "system", content: systemMessage },
           { role: "user", content: pergunta }

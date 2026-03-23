@@ -26,7 +26,7 @@ exports.handler = async function(event, context) {
     // 4. Monta o prompt do sistema para o Resumo
     const systemMessage = `Você é um especialista em neurodivergências. Crie um resumo claro, acessível e organizado dos documentos enviados. Adapte a linguagem para o perfil: ${perfil}. Inclua: os pontos principais, recomendações práticas encontradas no texto e uma breve conclusão. Use parágrafos curtos e linguagem simples.`;
 
-    // 5. Faz a requisição para o OpenRouter
+    // 5. Faz a requisição para o OpenRouter (Usando Gemini 2.0 Flash gratuito)
     const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -36,7 +36,7 @@ exports.handler = async function(event, context) {
         "X-Title": "NeuroVida"
       },
       body: JSON.stringify({
-        model: "meta-llama/llama-3.3-70b-instruct:free",
+        model: "google/gemini-2.0-flash-exp:free",
         messages: [
           { role: "system", content: systemMessage },
           { role: "user", content: `Documentos para resumir:\n\n${contexto}` }
