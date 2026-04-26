@@ -1,3 +1,33 @@
+function buildSystemPrompt(p) {
+  const instrucaoIdentidade = `IDENTIDADE E TRATAMENTO: O nome do usuário é ${p.nome || 'usuário'} e o seu gênero é ${p.genero || 'neutro'}. Dirija-se a ele pelo nome e aplique rigorosamente os pronomes correspondentes ao gênero informado. É ESTRITAMENTE PROIBIDO utilizar termos de afeto genéricos ou diminutivos. Seja profissional e respeitoso.`;
+
+  let instrucaoIdade;
+  if (p.idade === "criança") {
+    instrucaoIdade = "O usuário é uma CRIANÇA. Use linguagem muito simples, lúdica e gentil.";
+  } else if (p.idade === "adolescente") {
+    instrucaoIdade = "O usuário é um ADOLESCENTE. Use linguagem moderna, empática e direta.";
+  } else {
+    instrucaoIdade = "O usuário é um ADULTO. Seja objetivo, prático e use formatação em tópicos curtos sempre que possível.";
+  }
+
+  const instrucaoCondicao = `Condição base: ${(p.cond || 'geral').toUpperCase()}.`;
+
+  let instrucaoExtra = "";
+  if (p.prefs && p.prefs.trim() !== "") {
+    instrucaoExtra = `\nNOTAS DA ANAMNESE DO USUÁRIO (SIGA ESTRITAMENTE):\n${p.prefs}\n`;
+  }
+
+  return `Você é o Neuro I.A, um assistente especialista em neurodivergências da plataforma NeuroVida.
+Perfil de quem está usando a plataforma: ${(p.perfil || 'geral').toUpperCase()}.
+
+DIRETRIZES OBRIGATÓRIAS:
+0. ${instrucaoIdentidade}
+1. ${instrucaoIdade}
+2. ${instrucaoCondicao}${instrucaoExtra}
+
+Crie um resumo claro, acessível e organizado dos documentos enviados. Inclua: pontos principais, recomendações práticas e uma breve conclusão. Use parágrafos curtos e linguagem simples.`;
+}
+
 exports.handler = async function(event, context) {
   if (event.httpMethod !== "POST") {
     return {
@@ -10,6 +40,7 @@ exports.handler = async function(event, context) {
     const body = JSON.parse(event.body);
     const contexto = body.contexto || "";
     const perfil = body.perfil || "geral";
+    const perfilCompleto = body.perfilCompleto || null;
 
     const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
 
@@ -20,9 +51,10 @@ exports.handler = async function(event, context) {
       };
     }
 
-    const systemMessage = `Você é um especialista em neurodivergências. Crie um resumo claro, acessível e organizado dos documentos enviados. Adapte a linguagem para o perfil: ${perfil}. Inclua: os pontos principais, recomendações práticas encontradas no texto e uma breve conclusão. Use parágrafos curtos e linguagem simples.`;
+    const systemMessage = perfilCompleto
+      ? buildSystemPrompt(perfilCompleto)
+      : `Você é um especialista em neurodivergências. Crie um resumo claro, acessível e organizado dos documentos enviados. Adapte a linguagem para o perfil: ${perfil}. Inclua: os pontos principais, recomendações práticas encontradas no texto e uma breve conclusão. Use parágrafos curtos e linguagem simples.`;
 
-    // Roteador automático do OpenRouter para modelos gratuitos
     const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
       method: "POST",
       headers: {

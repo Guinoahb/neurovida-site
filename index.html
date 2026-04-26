@@ -187,7 +187,7 @@ footer strong{color:rgba(255,255,255,.75)}
 .nb-dz{border:1.5px dashed rgba(58,175,169,.3);border-radius:12px;padding:22px;text-align:center;cursor:pointer;transition:all .2s}
 .nb-dz:hover{border-color:var(--p);background:rgba(58,175,169,.05)}
 .nb-dz span{font-size:2rem;display:block;margin-bottom:8px}
-.nb-dz p{font-size:.73rem;color:var(--text3);line-height:1.45}
+.nb-dz p{font-size:.73rem;color:var(--text3);line-height:1.4}
 .nb-docs{display:flex;flex-direction:column;gap:8px}
 .nb-di{background:rgba(255,255,255,.5);border:1px solid var(--glass-border);border-radius:10px;padding:10px 12px;display:flex;align-items:center;gap:10px}
 .nb-di span{font-size:1.1rem}
@@ -209,9 +209,9 @@ footer strong{color:rgba(255,255,255,.75)}
 .msgs::-webkit-scrollbar-thumb{background:rgba(58,175,169,.3);border-radius:4px}
 .msg{padding:11px 15px;border-radius:14px;font-size:.82rem;line-height:1.6;max-width:82%}
 .msg.u{background:linear-gradient(135deg,var(--p),var(--p2));color:#fff;align-self:flex-end;border-bottom-right-radius:4px}
-.msg.a{background:rgba(255,255,255,.65);color:var(--text);align-self:flex-start;border-bottom-left-radius:4px;border:1px solid var(--glass-border)}
+.msg.a{background:rgba(255,255,255,.6);color:var(--text);align-self:flex-start;border-bottom-left-radius:4px;border:1px solid var(--glass-border)}
 .ci{display:flex;gap:8px;margin-top:auto}
-.ci input{flex:1;background:rgba(255,255,255,.5);border:1.5px solid var(--glass-border);border-radius:50px;padding:10px 18px;font-family:'DM Sans',sans-serif;font-size:.83rem;outline:none;transition:border-color .2s;color:var(--text)}
+.ci input{flex:1;background:rgba(255,255,255,.5);border:1px solid var(--glass-border);border-radius:50px;padding:10px 18px;font-family:'DM Sans',sans-serif;font-size:.83rem;outline:none;transition:border-color .2s;color:var(--text)}
 .ci input:focus{border-color:var(--p)}
 .ci button{background:linear-gradient(135deg,var(--p),var(--p2));color:#fff;border:none;border-radius:50px;padding:10px 22px;font-family:'DM Sans',sans-serif;font-weight:500;font-size:.83rem;cursor:pointer;transition:all .2s;white-space:nowrap}
 .ci button:hover{transform:scale(1.02)}
@@ -250,6 +250,13 @@ footer strong{color:rgba(255,255,255,.75)}
 .soon h3{font-family:'Syne',sans-serif;font-size:1.3rem;font-weight:800;color:var(--text)}
 .soon p{font-size:.88rem;color:var(--text2);max-width:300px;line-height:1.6}
 .soon-tag{background:rgba(246,174,45,.12);color:#916a00;border:1px solid rgba(246,174,45,.3);padding:5px 14px;border-radius:50px;font-size:.75rem;font-weight:500;margin-top:4px}
+
+/* ESTILOS DA ANAMNESE E ADMIN */
+.anam-q{margin-bottom:20px;background:rgba(255,255,255,.4);padding:16px;border-radius:12px;border:1px solid var(--glass-border)}
+.anam-q h4{font-family:'Syne',sans-serif;font-size:.9rem;color:var(--text);margin-bottom:12px}
+.anam-opt{display:block;margin-bottom:8px;font-size:.85rem;color:var(--text2);cursor:pointer;display:flex;align-items:center;gap:8px}
+.anam-opt input{accent-color:var(--p);width:16px;height:16px;cursor:pointer}
+
 @media(max-width:768px){
   nav{top:8px;width:calc(100% - 24px)}
   .hero-inner{grid-template-columns:1fr}.hero-visual{display:none}
@@ -381,6 +388,7 @@ footer strong{color:rgba(255,255,255,.75)}
 
 <footer>
   <p><strong>NeuroVida</strong> — Cada mente tem seu brilho ✨<br><span style="font-size:.72rem;margin-top:6px;display:block;color:rgba(255,255,255,.25)">Feito com ❤️ para a comunidade neurodivergente brasileira</span></p>
+  <div style="margin-top: 10px;"><span style="cursor:pointer; opacity:0.3; font-size:0.8rem;" onclick="tryAdmin()">🔒</span></div>
 </footer>
 </div>
 
@@ -390,6 +398,7 @@ footer strong{color:rgba(255,255,255,.75)}
       <div class="aside-user"><div class="aside-av" id="asideAv">U</div><div class="aside-info"><h4 id="asideName">Usuário</h4><p id="asidePerfil">Perfil</p></div></div>
       <div class="aside-nav">
         <a class="on" onclick="showSection('home',this)"><span class="ni">🏠</span>Início</a>
+        <a onclick="showSection('perfil',this)"><span class="ni">👤</span>Meu Perfil</a>
         <a onclick="showSection('notebook',this)"><span class="ni">🤖</span>Neuro I.A</a>
         <a onclick="showSection('ensino',this)"><span class="ni">📚</span>Ensino Adaptado</a>
         <a onclick="showSection('cognitivo',this)"><span class="ni">🧠</span>Cognitivo</a>
@@ -397,18 +406,45 @@ footer strong{color:rgba(255,255,255,.75)}
         <a onclick="showSection('rotinas',this)"><span class="ni">🗓️</span>Rotinas Visuais</a>
         <a onclick="showSection('sensorial',this)"><span class="ni">💆</span>Sensorial</a>
         <a onclick="showSection('comunidade',this)"><span class="ni">👥</span>Comunidade</a>
+        <a id="nav-admin" style="display:none; margin-top: 15px; border-top: 1px solid rgba(58,175,169,.2); border-radius: 0; padding-top: 15px;" onclick="showSection('admin',this)"><span class="ni">⚙️</span>Painel Admin</a>
       </div>
     </div>
     <div class="main-area">
       <div id="sec-home">
         <div class="dash-head"><div><h2 id="dashGreet">Olá! 👋</h2><p>O que vamos explorar hoje?</p></div></div>
         <div class="dash-cards">
-          <div class="dc" onclick="showSection('notebook')"><div class="dc-icon">🤖</div><h3>Neuro I.A</h3><p>Analise documentos com IA</p><span class="ds ds-ok">Disponível</span></div>
+          <div class="dc" onclick="showSection('notebook', document.querySelectorAll('.aside-nav a')[2])"><div class="dc-icon">🤖</div><h3>Neuro I.A</h3><p>Analise documentos</p><span class="ds ds-ok">Disponível</span></div>
+          <div class="dc" onclick="showSection('perfil', document.querySelectorAll('.aside-nav a')[1])"><div class="dc-icon">👤</div><h3>Meu Perfil</h3><p>Personalize sua IA</p><span class="ds ds-ok">Disponível</span></div>
           <div class="dc" onclick="showSection('ensino')"><div class="dc-icon">📚</div><h3>Ensino Adaptado</h3><p>Atividades pedagógicas</p><span class="ds ds-wip">Em breve</span></div>
           <div class="dc" onclick="showSection('cognitivo')"><div class="dc-icon">🧠</div><h3>Cognitivo</h3><p>Foco e memória</p><span class="ds ds-wip">Em breve</span></div>
           <div class="dc" onclick="showSection('nutricao')"><div class="dc-icon">🥗</div><h3>Nutrição</h3><p>Guias alimentares</p><span class="ds ds-wip">Em breve</span></div>
-          <div class="dc" onclick="showSection('rotinas')"><div class="dc-icon">🗓️</div><h3>Rotinas Visuais</h3><p>Organize seu dia</p><span class="ds ds-wip">Em breve</span></div>
           <div class="dc" onclick="showSection('comunidade')"><div class="dc-icon">👥</div><h3>Comunidade</h3><p>Conecte-se</p><span class="ds ds-wip">Em breve</span></div>
+        </div>
+      </div>
+
+      <div id="sec-perfil" style="display:none">
+        <div class="dash-head"><div><h2 style="font-family:Syne,sans-serif;font-size:1.4rem;font-weight:800;margin-bottom:4px">👤 Meu Perfil (Anamnese)</h2><p>Responda para moldarmos a IA ao seu jeito único de aprender.</p></div></div>
+        <div class="nb-full" style="padding:24px;">
+          <div id="anamneseForm">
+            </div>
+          <button class="btn btn-primary" onclick="saveAnamnese()" style="margin-top:10px">💾 Salvar Preferências</button>
+        </div>
+      </div>
+
+      <div id="sec-admin" style="display:none">
+        <div class="dash-head" style="background:linear-gradient(135deg, #17252A, #2B7A78);">
+          <div><h2 style="font-family:Syne,sans-serif;font-size:1.4rem;font-weight:800;margin-bottom:4px">⚙️ Painel do Administrador</h2><p>Conecte sua Planilha do Google para alimentar a IA em tempo real.</p></div>
+        </div>
+        <div class="nb-full" style="padding:24px;">
+          <h3 style="margin-bottom:12px; color:var(--text); font-family:'Syne',sans-serif; font-size:1.1rem;">1. Link da Planilha (Publicada como CSV)</h3>
+          <p style="font-size:0.85rem; color:var(--text2); margin-bottom:16px;">Cole o link público da sua planilha do Google Sheets (formato CSV) para atualizar a Base de Conhecimento.</p>
+          <div style="display:flex; gap:10px; margin-bottom:20px;">
+              <input type="text" id="sheetUrlIn" placeholder="Cole o link do CSV público aqui..." style="flex:1; padding:10px 14px; border-radius:8px; border:1px solid var(--glass-border); outline:none; font-family:'DM Sans',sans-serif;">
+              <button class="btn btn-primary" onclick="syncSheet()" id="btnSync">🔄 Sincronizar Agora</button>
+          </div>
+
+          <h3 style="margin-bottom:12px; color:var(--text); font-family:'Syne',sans-serif; font-size:1.1rem;">2. Memória Atual da IA</h3>
+          <textarea id="adminBaseTA" readonly style="width:100%; height:300px; border-radius:12px; border:1.5px solid var(--border); padding:14px; font-family:'DM Sans',sans-serif; font-size:0.88rem; outline:none; color:var(--text3); background:rgba(0,0,0,0.02); resize:vertical;" placeholder="A base de conhecimento aparecerá aqui após a sincronização..."></textarea>
         </div>
       </div>
 
@@ -437,7 +473,6 @@ footer strong{color:rgba(255,255,255,.75)}
               </div>
               <div class="nb-ct">
 
-                <!-- PAINEL CHAT -->
                 <div class="nb-pn on" id="pn-chat">
                   <div class="msgs" id="chatMsgs">
                     <div class="empty"><span>💬</span><h4>Faça uma pergunta</h4><p>Envie um documento e pergunte sobre ele</p></div>
@@ -448,22 +483,19 @@ footer strong{color:rgba(255,255,255,.75)}
                   </div>
                 </div>
 
-                <!-- PAINEL RESUMO -->
                 <div class="nb-pn" id="pn-summary">
                   <div id="sumOut"><div class="empty"><span>📝</span><h4>Nenhum resumo ainda</h4><p>Envie um documento e gere o resumo</p></div></div>
                   <button class="btn btn-primary" onclick="doSummary()" id="sumBtn" style="margin-top:14px;align-self:flex-start">Gerar Resumo Automático</button>
                 </div>
 
-                <!-- PAINEL NOTAS -->
                 <div class="nb-pn" id="pn-notes">
                   <div class="notes-ta"><textarea id="notesTA" placeholder="Escreva suas anotações aqui..."></textarea></div>
                   <div class="notes-acts">
-                    <button class="btn btn-primary" onclick="saveNotes()">💾 Salvar</button>
+                    <button class="btn btn-primary" onclick="saveNotes()">💾 Salvar Notas</button>
                     <button class="btn btn-ghost" onclick="clearNotes()">🗑️ Limpar</button>
                   </div>
                 </div>
 
-                <!-- PAINEL ÁUDIO -->
                 <div class="nb-pn" id="pn-audio">
                   <div class="audio-ctr">
                     <span class="big">🎙️</span>
@@ -474,7 +506,6 @@ footer strong{color:rgba(255,255,255,.75)}
                   </div>
                 </div>
 
-                <!-- PAINEL SUGESTÕES -->
                 <div class="nb-pn" id="pn-sugs">
                   <div id="sugsOut"><div class="empty"><span>💡</span><h4>Nenhuma sugestão ainda</h4><p>Envie um documento para receber sugestões</p></div></div>
                   <button class="btn btn-primary" onclick="doSugs()" id="sugsBtn" style="margin-top:14px;align-self:flex-start">Gerar Sugestões Personalizadas</button>
@@ -501,23 +532,224 @@ footer strong{color:rgba(255,255,255,.75)}
     <button class="modal-x" onclick="closeModal()">✕</button>
     <div class="modal-brand"><div class="logo-mark" style="width:48px;height:48px;font-size:1.4rem;margin:0 auto 10px">🧠</div><h3>NeuroVida</h3><p>Cada mente tem seu brilho</p></div>
     <div class="m-tabs"><div class="m-tab on" id="mt-login" onclick="mTab('login')">Entrar</div><div class="m-tab" id="mt-register" onclick="mTab('register')">Criar conta</div></div>
+    
     <div id="mf-login">
       <div class="fg"><label>Seu nome</label><input type="text" id="lName" placeholder="Como posso te chamar?"></div>
+      <div class="fg"><label>Como prefere ser tratado?</label><select id="lGenero"><option value="masculino">Masculino (ele/dele)</option><option value="feminino">Feminino (ela/dela)</option><option value="neutro">Neutro (sem gênero)</option></select></div>
       <div class="fg"><label>Perfil</label><select id="lPerfil"><option value="neurodivergente">🧩 Sou neurodivergente</option><option value="cuidador">👨‍👩‍👧 Pai/mãe ou cuidador</option><option value="educador">🏫 Professor ou terapeuta</option></select></div>
       <div class="fg"><label>Condição</label><select id="lCond"><option value="tdah">⚡ TDAH</option><option value="tea">🌈 TEA (Autismo)</option><option value="dislexia">📖 Dislexia</option><option value="dispraxia">🤸 Dispraxia</option><option value="discalculia">🔢 Discalculia</option><option value="disgrafia">✏️ Disgrafia</option><option value="tourette">🎭 Tourette</option><option value="altasHabilidades">⭐ Altas Habilidades</option><option value="sensorial">🌀 TPS</option></select></div>
+      <div class="fg"><label>Faixa Etária</label><select id="lIdade"><option value="criança">Criança (até 12 anos)</option><option value="adolescente">Adolescente (13 a 17 anos)</option><option value="adulto">Adulto (18+ anos)</option></select></div>
       <button class="btn btn-primary f-submit" onclick="doLogin()">Entrar na plataforma →</button>
     </div>
+    
     <div id="mf-register" style="display:none">
       <div class="fg"><label>Seu nome</label><input type="text" id="rName" placeholder="Como posso te chamar?"></div>
+      <div class="fg"><label>Como prefere ser tratado?</label><select id="rGenero"><option value="masculino">Masculino (ele/dele)</option><option value="feminino">Feminino (ela/dela)</option><option value="neutro">Neutro (sem gênero)</option></select></div>
       <div class="fg"><label>Perfil</label><select id="rPerfil"><option value="neurodivergente">🧩 Sou neurodivergente</option><option value="cuidador">👨‍👩‍👧 Pai/mãe ou cuidador</option><option value="educador">🏫 Professor ou terapeuta</option></select></div>
       <div class="fg"><label>Condição</label><select id="rCond"><option value="tdah">⚡ TDAH</option><option value="tea">🌈 TEA (Autismo)</option><option value="dislexia">📖 Dislexia</option><option value="dispraxia">🤸 Dispraxia</option><option value="discalculia">🔢 Discalculia</option><option value="disgrafia">✏️ Disgrafia</option><option value="tourette">🎭 Tourette</option><option value="altasHabilidades">⭐ Altas Habilidades</option><option value="sensorial">🌀 TPS</option></select></div>
+      <div class="fg"><label>Faixa Etária</label><select id="rIdade"><option value="criança">Criança (até 12 anos)</option><option value="adolescente">Adolescente (13 a 17 anos)</option><option value="adulto">Adulto (18+ anos)</option></select></div>
       <button class="btn btn-primary f-submit" onclick="doRegister()">Criar conta grátis 🚀</button>
     </div>
   </div>
 </div>
 
 <script>
+// Chave removida do frontend por segurança. As chamadas agora passam pelas Netlify Functions.
+
 let user=null, docs=[], sumText='';
+
+// ==========================================
+// INTEGRAÇÃO COM GOOGLE SHEETS (BANCO DE DADOS)
+// ==========================================
+// AQUI ESTÁ O SEU LINK PADRÃO COMO FONTE OFICIAL DA IA
+let sheetUrl = localStorage.getItem('neurovida_sheet_url') || "https://docs.google.com/spreadsheets/d/e/2PACX-1vR7ZRvf5eoak_sdE5w-TJKFTjYViay8SBLSQA4I95KcjPc-Lwzb4f56VqYq22i6TPlVEfhEFhZ91gxG/pub?output=csv";
+let baseGlobalDaIA = localStorage.getItem('neurovida_base') || "Aguardando sincronização com a planilha...";
+
+// Função nativa para traduzir o CSV do Google para texto lido pela IA
+function csvToArray(text) {
+    let p = '', row = [''], ret = [row], i = 0, r = 0, s = !0, l;
+    for (let l of text) {
+        if ('"' === l) {
+            if (s && l === p) row[i] += l;
+            s = !s;
+        } else if (',' === l && s) l = row[++i] = '';
+        else if ('\n' === l && s) {
+            if ('\r' === p) row[i] = row[i].slice(0, -1);
+            row = ret[++r] = [l = '']; i = 0;
+        } else row[i] += l;
+        p = l;
+    }
+    return ret;
+}
+
+// Sincroniza silenciosamente a planilha sempre que o site é carregado
+async function autoSyncSheet() {
+    if(!sheetUrl) return;
+    try {
+        let res = await fetch(sheetUrl);
+        let text = await res.text();
+        let arr = csvToArray(text);
+        let novaBase = ""; 
+        for(let i=1; i<arr.length; i++) {
+            if(arr[i] && arr[i][0]) {
+                novaBase += `[TÓPICO: ${arr[i][0]}]\n${arr[i][1] || ''}\n\n`;
+            }
+        }
+        baseGlobalDaIA = novaBase;
+        localStorage.setItem('neurovida_base', baseGlobalDaIA);
+        if(document.getElementById('adminBaseTA')) {
+            document.getElementById('adminBaseTA').value = baseGlobalDaIA;
+        }
+    } catch(e) {
+        console.log("Erro ao sincronizar planilha no fundo", e);
+    }
+}
+
+// Botão manual no Painel Admin para forçar a sincronização caso você mude o link
+async function syncSheet() {
+    const url = document.getElementById('sheetUrlIn').value.trim();
+    if(!url) { alert("Cole o link da planilha CSV!"); return; }
+    const btn = document.getElementById('btnSync');
+    btn.textContent = "Sincronizando..."; btn.disabled = true;
+
+    try {
+        let res = await fetch(url);
+        if(!res.ok) throw new Error("Erro na rede");
+        let text = await res.text();
+        let arr = csvToArray(text);
+        
+        let novaBase = ""; 
+        for(let i=1; i<arr.length; i++) { 
+            if(arr[i] && arr[i][0]) {
+                novaBase += `[TÓPICO: ${arr[i][0]}]\n${arr[i][1] || ''}\n\n`;
+            }
+        }
+        
+        baseGlobalDaIA = novaBase;
+        sheetUrl = url;
+        localStorage.setItem('neurovida_base', baseGlobalDaIA);
+        localStorage.setItem('neurovida_sheet_url', sheetUrl);
+        document.getElementById('adminBaseTA').value = baseGlobalDaIA;
+        
+        alert("✅ Sincronizado com sucesso! A IA já está usando os dados da sua planilha.");
+    } catch(e) {
+        alert("⚠️ Erro ao sincronizar. Verifique se você publicou a planilha como CSV.");
+        console.error(e);
+    }
+    btn.textContent = "🔄 Sincronizar Agora"; btn.disabled = false;
+}
+
+function tryAdmin() {
+  const pwd = prompt("Área Restrita. Digite a senha do Administrador:");
+  if (pwd === "admin123") {
+    user = {nome:"Administrador", genero:"masculino", perfil:"admin", cond:"padrao", idade:"adulto", prefs:'', respostas:{}};
+    localStorage.setItem('neurovida_user', JSON.stringify(user));
+    enter();
+  } else if (pwd !== null) {
+    alert("Senha incorreta.");
+  }
+}
+
+// ==========================================
+// BANCO DE PERGUNTAS DINÂMICAS (ANAMNESE)
+// ==========================================
+const anamneseConfig = {
+  tdah: [
+    { id: 'q1', title: 'Como você prefere ler as respostas da IA?', options: ['Direto ao ponto, tópicos curtos.', 'Leitura dinâmica com palavras em negrito.', 'Textos detalhados e profundos.'] },
+    { id: 'q2', title: 'Qual é a sua maior barreira no dia a dia?', options: ['Dar o primeiro passo (iniciação).', 'Manter o foco sem a mente voar.', 'Organização e controle de tempo.', 'Sobrecarga Emocional e Rejeição.'] }
+  ],
+  tea: [
+    { id: 'q1', title: 'Estilo de Comunicação ideal:', options: ['Literal e Direta (sem ironias ou duplos sentidos).', 'Suave e Explicativa (explicar o porquê de tudo).'] },
+    { id: 'q2', title: 'Necessidade de Previsibilidade:', options: ['Preciso de passo a passo detalhado.', 'Preciso do panorama geral antes de começar.'] }
+  ],
+  dislexia: [
+    { id: 'q1', title: 'Formato Visual:', options: ['Textos em blocos super curtos e fáceis.', 'Resumos com palavras simples.'] },
+    { id: 'q2', title: 'Apoio Complementar:', options: ['Gosto de analogias visuais para entender.', 'Vou priorizar sempre o áudio.'] }
+  ],
+  altasHabilidades: [
+    { id: 'q1', title: 'Profundidade da Resposta:', options: ['Avançado (vocabulário rico e conceitos técnicos).', 'Desafiador (me faça perguntas também).'] },
+    { id: 'q2', title: 'Foco do Suporte:', options: ['Aprofundamento em hiperfocos.', 'Apoio para lidar com tédio ou frustração emocional.'] }
+  ],
+  discalculia: [
+    { id: 'q1', title: 'Como lidar com Dados e Números:', options: ['Explique usando exemplos visuais e cotidianos.', 'Mostre apenas o resultado final sem fórmulas.'] }
+  ],
+  dispraxia: [
+    { id: 'q1', title: 'Organização de Tarefas:', options: ['Divida tudo em micro-passos hiperdetalhados.', 'Roteiro completo em formato de checklist antes de agir.'] }
+  ],
+  disgrafia: [
+    { id: 'q1', title: 'Facilitação de Interação:', options: ['Me dê respostas onde eu só precise dizer Sim ou Não.', 'Gere modelos de texto para eu copiar e colar.'] }
+  ],
+  tourette: [
+    { id: 'q1', title: 'Gerenciamento de Estresse Cognitivo:', options: ['Tom calmo, sem gerar senso de urgência ou alerta.', 'Entregue uma informação por vez.'] }
+  ],
+  sensorial: [
+    { id: 'q1', title: 'Conforto Visual (Barulho Digital):', options: ['Zero emojis, texto limpo e minimalista.', 'Estrutura com muito espaço em branco entre as linhas.'] }
+  ],
+  padrao: [
+    { id: 'q1', title: 'Estilo de Comunicação', options: ['Objetiva e Lógica', 'Acolhedora e Empática'] },
+    { id: 'q2', title: 'Apresentação', options: ['Limpo e Simples', 'Visual e Dinâmico'] }
+  ]
+};
+
+// ==========================================
+// SISTEMA DE MEMÓRIA E INICIALIZAÇÃO
+// ==========================================
+window.onload = function() {
+  document.querySelectorAll('.nb-pn').forEach(p => {
+    p.style.display = p.classList.contains('on') ? 'flex' : 'none';
+  });
+  
+  // Quando abrir o site, puxa a planilha mais recente do Google
+  autoSyncSheet();
+
+  const savedUser = localStorage.getItem('neurovida_user');
+  if(savedUser) {
+    try {
+      user = JSON.parse(savedUser);
+      enter(true); 
+    } catch(e) {
+      console.log("Erro ao ler usuário", e);
+    }
+  }
+};
+
+function renderAnamnese() {
+  if(!user) return;
+  const container = document.getElementById('anamneseForm');
+  container.innerHTML = '';
+  
+  const perguntas = anamneseConfig[user.cond] || anamneseConfig.padrao;
+  
+  perguntas.forEach((p, index) => {
+    let html = `<div class="anam-q" id="anam_${p.id}"><h4>${index+1}. ${p.title}</h4>`;
+    p.options.forEach((opt) => {
+      const isChecked = user.respostas && user.respostas[p.id] === opt ? 'checked' : '';
+      html += `<label class="anam-opt"><input type="radio" name="${p.id}" value="${opt}" ${isChecked}> ${opt}</label>`;
+    });
+    html += `</div>`;
+    container.innerHTML += html;
+  });
+}
+
+function saveAnamnese() {
+  if(!user) return;
+  const perguntas = anamneseConfig[user.cond] || anamneseConfig.padrao;
+  let respostasSalvas = {};
+  let regrasCompiladas = "";
+
+  perguntas.forEach(p => {
+    const selected = document.querySelector(`input[name="${p.id}"]:checked`);
+    if(selected) {
+      respostasSalvas[p.id] = selected.value;
+      regrasCompiladas += `- ${p.title} Preferência do usuário: ${selected.value}\n`;
+    }
+  });
+
+  user.respostas = respostasSalvas;
+  user.prefs = regrasCompiladas;
+  localStorage.setItem('neurovida_user', JSON.stringify(user));
+  alert('✅ Anamnese salva! A IA acaba de se adaptar perfeitamente ao seu perfil.');
+}
 
 function openModal(t){document.getElementById('ov').classList.add('on');mTab(t)}
 function closeModal(){document.getElementById('ov').classList.remove('on')}
@@ -528,35 +760,70 @@ function mTab(t){
   document.getElementById('mf-login').style.display=t==='login'?'block':'none';
   document.getElementById('mf-register').style.display=t==='register'?'block':'none';
 }
+
 function doLogin(){
   const n=document.getElementById('lName').value.trim();
   if(!n){alert('Informe seu nome!');return}
-  user={nome:n,perfil:document.getElementById('lPerfil').value,cond:document.getElementById('lCond').value};
+  user = {
+    nome:n, 
+    genero:document.getElementById('lGenero').value,
+    perfil:document.getElementById('lPerfil').value, 
+    cond:document.getElementById('lCond').value, 
+    idade:document.getElementById('lIdade').value, 
+    prefs:'', 
+    respostas:{}
+  };
+  localStorage.setItem('neurovida_user', JSON.stringify(user));
   enter();
 }
+
 function doRegister(){
   const n=document.getElementById('rName').value.trim();
   if(!n){alert('Informe seu nome!');return}
-  user={nome:n,perfil:document.getElementById('rPerfil').value,cond:document.getElementById('rCond').value};
+  user = {
+    nome:n, 
+    genero:document.getElementById('rGenero').value,
+    perfil:document.getElementById('rPerfil').value, 
+    cond:document.getElementById('rCond').value, 
+    idade:document.getElementById('rIdade').value, 
+    prefs:'', 
+    respostas:{}
+  };
+  localStorage.setItem('neurovida_user', JSON.stringify(user));
   enter();
 }
-function enter(){
-  closeModal();
+
+function enter(isAutoLogin = false){
+  if(!isAutoLogin) closeModal();
   document.getElementById('landingPage').style.display='none';
   document.getElementById('platformPage').classList.add('on');
   document.getElementById('logoutBtn').style.display='flex';
   document.querySelectorAll('.landing-el').forEach(el=>el.style.display='none');
+  
   const h=new Date().getHours();
   const g=h<12?'Bom dia':h<18?'Boa tarde':'Boa noite';
   document.getElementById('dashGreet').textContent=g+', '+user.nome+'! 👋';
   document.getElementById('asideName').textContent=user.nome;
   document.getElementById('asideAv').textContent=user.nome[0].toUpperCase();
-  const pl={neurodivergente:'🧩 Neurodivergente',cuidador:'👨‍👩‍👧 Cuidador',educador:'🏫 Educador'};
+  
+  const pl={neurodivergente:'🧩 Neurodivergente',cuidador:'👨‍👩‍👧 Cuidador',educador:'🏫 Educador', admin:'⚙️ Administrador'};
   document.getElementById('asidePerfil').textContent=pl[user.perfil]||user.perfil;
-  showSection('home');
+  
+  if (user && user.perfil === 'admin') {
+      document.getElementById('nav-admin').style.display = 'flex';
+      document.getElementById('adminBaseTA').value = baseGlobalDaIA; 
+      document.getElementById('sheetUrlIn').value = sheetUrl;
+  } else {
+      document.getElementById('nav-admin').style.display = 'none';
+  }
+
+  renderAnamnese();
+  showSection(user.perfil === 'admin' ? 'admin' : 'home', document.querySelectorAll('.aside-nav a')[user.perfil === 'admin' ? 9 : 0]);
 }
+
 function logout(){
   user=null; docs=[];
+  localStorage.removeItem('neurovida_user'); 
   document.getElementById('landingPage').style.display='';
   document.getElementById('platformPage').classList.remove('on');
   document.getElementById('logoutBtn').style.display='none';
@@ -567,9 +834,10 @@ function showSection(n, el){
   document.querySelectorAll('[id^="sec-"]').forEach(s=>s.style.display='none');
   const sec=document.getElementById('sec-'+n);
   if(sec) sec.style.display='block';
+  
   document.querySelectorAll('.aside-nav a').forEach(a=>a.classList.remove('on'));
   if(el) el.classList.add('on');
-  // se clicou no notebook, garante que o painel chat está visível
+  
   if(n==='notebook') nbTab('chat', document.querySelector('.nb-tb'));
 }
 
@@ -606,38 +874,34 @@ function nbTab(name, el){
   if(pn){ pn.classList.add('on'); pn.style.display='flex'; }
 }
 
-// =============================================
-// NEURO I.A — NETLIFY FUNCTION
-// =============================================
-async function callIA(messages, userProfile){
-  const res=await fetch('/.netlify/functions/chat',{
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({messages, userProfile})
-  });
-  if(!res.ok) throw new Error('Erro na IA: '+res.status);
-  const data=await res.json();
-  return data.response;
-}
+
 
 async function doChat(){
   const q=document.getElementById('chatQ').value.trim();
   if(!q) return;
+
   addMsg('user',q);
   document.getElementById('chatQ').value='';
   const lid=addLoading();
   document.getElementById('sendB').disabled=true;
-  const ctx=docs.length ? docs.map(d=>d.name+': '+d.content).join('---') : null;
+
+  const ctx=docs.length ? docs.map(d=>d.name+': '+d.content).join('\n---\n') : '';
+  const perfil=user?.cond||'geral';
+  const perfilCompleto=user ? {...user, base: baseGlobalDaIA} : null;
+
   try{
-    const resposta=await callIA(
-      [{role:'user',content: ctx ? 'Documentos: '+ctx+' Pergunta: '+q : q}],
-      user?.cond||'geral'
-    );
+    const res=await fetch('/.netlify/functions/chat',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({pergunta:q, contexto:ctx, perfil, perfilCompleto})
+    });
+    if(!res.ok) throw new Error('Erro na IA: '+res.status);
+    const data=await res.json();
     rmLoading(lid);
-    addMsg('ai',resposta);
+    addMsg('ai',data.texto);
   }catch(err){
     rmLoading(lid);
-    addMsg('ai','⚠️ Erro de conexão. Verifique sua internet e tente novamente.');
+    addMsg('ai','⚠️ Erro de conexão. Tente novamente.');
     console.error(err);
   }
   document.getElementById('sendB').disabled=false;
@@ -664,14 +928,23 @@ function rmLoading(id){const e=document.getElementById(id);if(e)e.remove()}
 
 async function doSummary(){
   if(!docs.length){alert('Envie um documento primeiro!');return}
+
   const b=document.getElementById('sumBtn');
   b.textContent='Gerando...'; b.disabled=true;
+
   const ctx=docs.map(d=>`[${d.name}]:\n${d.content}`).join('\n\n---\n\n');
+  const perfil=user?.cond||'geral';
+  const perfilCompleto=user ? {...user, base: baseGlobalDaIA} : null;
+
   try{
-    sumText=await callIA(
-      [{role:'user',content:`Crie um resumo completo, claro e acessível. Use linguagem simples. Inclua: pontos principais, recomendações práticas e conclusões importantes.\n\n${ctx}`}],
-      user?.cond||'geral'
-    );
+    const res=await fetch('/.netlify/functions/resumo',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({contexto:ctx, perfil, perfilCompleto})
+    });
+    if(!res.ok) throw new Error('Erro na IA: '+res.status);
+    const data=await res.json();
+    sumText=data.texto;
     document.getElementById('sumOut').innerHTML=`
       <div class="sum-box"><h4>📝 Resumo gerado pelo Neuro I.A</h4>
       <p>${sumText.replace(/\n/g,'<br>').replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')}</p></div>
@@ -680,7 +953,7 @@ async function doSummary(){
         <button class="sa" onclick="document.getElementById('notesTA').value=sumText;nbTab('notes',document.querySelectorAll('.nb-tb')[2])">🗒️ Para notas</button>
       </div>`;
   }catch(err){
-    document.getElementById('sumOut').innerHTML='<p style="color:red">Erro ao gerar resumo. Tente novamente.</p>';
+    document.getElementById('sumOut').innerHTML='<p style="color:red">Erro ao gerar resumo. A fila da IA pode estar cheia, tente novamente.</p>';
     console.error(err);
   }
   b.textContent='Gerar Resumo Automático'; b.disabled=false;
@@ -703,22 +976,30 @@ function doAudio(){
 
 async function doSugs(){
   if(!docs.length){alert('Envie um documento primeiro!');return}
+
   const b=document.getElementById('sugsBtn');
   b.textContent='Gerando...'; b.disabled=true;
+
   const ctx=docs.map(d=>`[${d.name}]:\n${d.content.substring(0,800)}`).join('\n\n');
+  const perfil=user?.cond||'geral';
+  const perfilCompleto=user ? {...user, base: baseGlobalDaIA} : null;
+
   try{
-    const txt=await callIA(
-      [{role:'user',content:`Perfil: ${user?.cond||'geral'}. Gere 4 sugestões práticas baseadas nos documentos. Retorne APENAS JSON válido:\n{"s":[{"e":"emoji","t":"título curto","d":"descrição de 1 linha"}]}\n\nDocumentos:\n${ctx}`}],
-      user?.cond||'geral'
-    );
-    let sugs=[];
-    try{sugs=JSON.parse(txt.replace(/```json|```/g,'').trim()).s||[]}catch{}
+    const res=await fetch('/.netlify/functions/sugestoes',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({contexto:ctx, perfil, perfilCompleto})
+    });
+    if(!res.ok) throw new Error('Erro na IA: '+res.status);
+    const data=await res.json();
+    const sugs=data.sugestoes||[];
+
     if(sugs.length){
       document.getElementById('sugsOut').innerHTML=`
         <h5 style="font-size:.75rem;font-weight:500;color:var(--text3);letter-spacing:.05em;text-transform:uppercase;margin-bottom:12px">💡 Sugestões para ${user?.cond||'você'}</h5>
         <div class="sug-list">${sugs.map(s=>`<div class="sug"><span>${s.e}</span><div><h5>${s.t}</h5><p>${s.d}</p></div></div>`).join('')}</div>`;
     }else{
-      document.getElementById('sugsOut').innerHTML='<p style="color:var(--text2)">Não foi possível gerar sugestões. Tente novamente.</p>';
+      document.getElementById('sugsOut').innerHTML='<p style="color:var(--text2)">Não foi possível formatar as sugestões. Tente gerar novamente.</p>';
     }
   }catch(err){
     document.getElementById('sugsOut').innerHTML='<p style="color:red">Erro ao gerar sugestões. Tente novamente.</p>';
@@ -726,13 +1007,6 @@ async function doSugs(){
   }
   b.textContent='Gerar Sugestões Personalizadas'; b.disabled=false;
 }
-
-// Init: usa window.onload para garantir que tudo está carregado
-window.onload = function(){
-  document.querySelectorAll('.nb-pn').forEach(p=>{
-    p.style.display = p.classList.contains('on') ? 'flex' : 'none';
-  });
-};
 </script>
 </body>
 </html>
